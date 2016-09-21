@@ -73,5 +73,20 @@ app.use(function(err, req, res, next) {
   });
 });
 
+//Below methods are helpful for automated testing framework - mocha
+app.server = { name: 'name of the server', type: 'selfhost', version: '1.0.0.1'};
+app.server.start = function (port, callback) {
+    //starting the server
+    app.server.instance = app.listen(port, callback);
+};
+
+app.server.stop = function (callback) {
+    if (app.server.instance) {
+        app.server.instance.close(callback);
+    }
+    else {
+        callback({ error: 'Server instance not found' });
+    }
+};
 
 module.exports = app;
