@@ -1,0 +1,2 @@
+C:\EGI\Study\Node\nodetube\obj\Debug\nodetube.njsprojResolveAssemblyReference.cache
+C:\EGI\Study\Node\nodetube\bin\Microsoft.NodejsTools.WebRole.dll
