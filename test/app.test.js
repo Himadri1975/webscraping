@@ -3,18 +3,22 @@ var app = require('../app');
 var request = require('superagent');
 var expect = require('expect.js');
 var cheerio = require('cheerio');
+var os = require('os');
 var util = require('util');
 var timeoutValue = 30000;
+var config = require('../config');
 
-var port = 3000;
-var baseURL = "http://localhost:3000/";
+var port = config().port || 3000;
+var HOSTNAME = config().host || "localhost";
+//var baseURL = "http://localhost:3000/";
+var baseURL = HOSTNAME + ":" + port;
 
 describe('Testing webscrapping web software', function () {
     this.timeout(timeoutValue);
     before('Before initializing the test', function (done) {
         //This calles once as the begining of the call
         this.timeout(timeoutValue);
-        port = port || 3000;
+        
         if (app.server && !app.server.instance) {
             app.server.start(port, function (msg) {
                 console.log('----- Application server started -----');
@@ -49,7 +53,7 @@ describe('Testing webscrapping web software', function () {
 
         it('www.merittree.com request check', function (done) {
             this.timeout(timeoutValue);
-            var callingUri = baseURL + '?url=http://www.merittree.com/';
+            var callingUri = "http://" + baseURL + '/?url=http://www.merittree.com/';
             request.get(callingUri)
                 .on('error', function (e) {
                     if (done)
@@ -71,7 +75,7 @@ describe('Testing webscrapping web software', function () {
             //assert.ok(1 === 1, "This shouldn't fail");
             //assert.ok(false, "This should fail");
             this.timeout(timeoutValue);
-            var callingUri = baseURL + '?url=http://www.merittree.com/';
+            var callingUri = "http://" + baseURL + '?url=http://www.merittree.com/';
             request.get(callingUri)
                 .on('error', function (e) {
                     if (done)
@@ -98,7 +102,7 @@ describe('Testing webscrapping web software', function () {
         it('www.merittree.com logo check', function (done) {
             //http://merittree.com/wp-content/uploads/2015/10/merittree.png
             this.timeout(timeoutValue);
-            var callingUri = baseURL + '?url=http://merittree.com/wp-content/uploads/2015/10/merittree.png';
+            var callingUri = "http://" + baseURL + '?url=http://merittree.com/wp-content/uploads/2015/10/merittree.png';
             request.get(callingUri)
                 .on('error', function (e) {
                     if (done)

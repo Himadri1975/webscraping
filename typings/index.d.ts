@@ -3,6 +3,7 @@
 /// <reference path="globals/cheerio/index.d.ts" />
 /// <reference path="globals/cookie-parser/index.d.ts" />
 /// <reference path="globals/cookie-session/index.d.ts" />
+/// <reference path="globals/css/index.d.ts" />
 /// <reference path="globals/debug/index.d.ts" />
 /// <reference path="globals/expect.js/index.d.ts" />
 /// <reference path="globals/express-session/index.d.ts" />

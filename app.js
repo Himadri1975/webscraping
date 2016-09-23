@@ -5,6 +5,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var config = require('./config');
+
+var port = config().port || 3000;
+var HOSTNAME = config().host || "localhost";
+var baseURL = HOSTNAME + ":" + port;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -35,7 +40,8 @@ app.use(function (req, res, next) {
     var url = req.url;
 
     if (url && url.indexOf(hostUrl) == -1) {
-        var redirectedLocation = "http://localhost:3000/?url=" + "http://" + hostUrl + url;
+        //var redirectedLocation = "http://localhost:3000/?url=" + "http://" + hostUrl + url;
+        var redirectedLocation = "http://" + baseURL + "/?url=" + "http://" + hostUrl + url;
 
         res.redirect(302, redirectedLocation);
         //res.statusCode = 302;
@@ -65,13 +71,15 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
+if (app.get('env') === 'production') {
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: {}
+        });
+    });
+}
 
 //Below methods are helpful for automated testing framework - mocha
 app.server = { name: 'name of the server', type: 'selfhost', version: '1.0.0.1'};

@@ -22,6 +22,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="config.js" />
     <Compile Include="test\app.test.js">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
@@ -47,6 +48,7 @@
     <Folder Include="typings\globals\cheerio\" />
     <Folder Include="typings\globals\cookie-parser\" />
     <Folder Include="typings\globals\cookie-session\" />
+    <Folder Include="typings\globals\css\" />
     <Folder Include="typings\globals\debug\" />
     <Folder Include="typings\globals\expect.js\" />
     <Folder Include="typings\globals\express-session\" />
@@ -66,6 +68,7 @@
     <TypeScriptCompile Include="typings\globals\cheerio\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\cookie-parser\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\cookie-session\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\css\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\debug\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\expect.js\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\express-session\index.d.ts" />
