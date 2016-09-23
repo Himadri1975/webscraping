@@ -10,3 +10,5 @@
 test:
   override:    
     - mocha
+  environment:
+    NODE_ENV: deployment
