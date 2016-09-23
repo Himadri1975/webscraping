@@ -6,9 +6,9 @@
 #    branch: master
 #    commands:
 #      - $DOCKER_HUB_TRIGGER
-
+machine:
+  environment:
+    NODE_ENV: deployment
 test:
   override:    
     - mocha
-  environment:
-    NODE_ENV: deployment
