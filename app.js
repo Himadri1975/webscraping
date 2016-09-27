@@ -32,9 +32,9 @@ app.use(cookieSession({ name: 'session', keys: ['key1', 'key2'] }));
 app.use('/', routes);
 app.use('/users', users);
 
-const HOSTNAME = "192.168.99.100";
-const PORT = 8989;
-var baseUri = "http://" + HOSTNAME + ":" + PORT;
+//const HOSTNAME = "192.168.99.100";
+//const PORT = 8989;
+//var baseUri = "http://" + HOSTNAME + ":" + PORT;
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
