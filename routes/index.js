@@ -8,15 +8,29 @@ var request = require('request');
 var cheerio = require('cheerio');
 var path = require('path');
 var os = require('os');
+<<<<<<< HEAD
+=======
+var css = require('css');
+
+>>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
 var router = express.Router();
 var sTitle = 'Express';
 var domain = '';
+var requestingDomain = '';
+var config = require('../config');
 
 //var cert = require('ssl-root-cas/latest');
+<<<<<<< HEAD
 //const HOSTNAME = os.hostname() || "localhost";
 const HOSTNAME = "192.168.99.100";
 const PORT = 8989;
 var baseURI = "http://" + HOSTNAME + ":" + PORT;
+=======
+var port = config().port || 3000;
+var HOSTNAME = config().host || "localhost";
+//var baseURL = "http://localhost:3000/";
+var baseURL = HOSTNAME + ":" + port;
+>>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
 
 /* GET home page. */
 var url = '';
@@ -37,7 +51,10 @@ router.get('/', function (req, res, next) {
         }
     }
 
+
     var URL = urlLib.parse(url);
+    requestingDomain = URL.hostname;
+
     if (!req.session.hostURL || (URL.hostname && req.session.hostURL != URL.hostname)) {
         req.session.hostURL = domain = URL.hostname;
     }
@@ -48,15 +65,24 @@ router.get('/', function (req, res, next) {
         fileExtn.indexOf('.png') > -1 ||
         fileExtn.indexOf('.bpm') > -1 ||
         fileExtn.indexOf('.jpeg') > -1 ||
+        fileExtn.indexOf('.gif') > -1 ||
         fileExtn.indexOf('.ico') > -1) { //its an image
-        request.get(url).pipe(res);
+
+        try {
+            request.get(url).on('error', function (err) {
+                console.log('Error on request object: -' + url + " error:: ", err);  
+            }).pipe(res);
+        }
+        catch (err) {
+            res.render('index', { title: err.message });
+        }
     }
     else {
         console.log("URL: " + url);
         request({
             url: url,
             method: req.method,
-            timeout: 10000,
+            timeout: 30000,
             followRedirect: true
         }, function (error, response, html) {
             //debugger;
@@ -116,6 +142,46 @@ router.get('/', function (req, res, next) {
                         }
                     });
                 }
+                else if (response.headers["content-type"] == "text/css")
+                {
+                    var cssObj = null;
+                    try {
+                        //var targetUrl = "http://" + domain + URL.pathname.replace(path.basename(URL.pathname), "");
+                        var targetUrl = "http://" + requestingDomain + URL.pathname.replace(path.basename(URL.pathname), "");
+                        
+                        cssObj = css.parse(html, { source: 'sample.css' });
+                        if (cssObj && cssObj.stylesheet) { //css object is not null
+                            for (var ruleidx in cssObj.stylesheet.rules) {
+                                var rule = cssObj.stylesheet.rules[ruleidx];
+                                for (var decidx in rule.declarations) {
+                                    var declaration = rule.declarations[decidx];
+                                    if (declaration.comment && declaration.comment.indexOf('url') > -1 && declaration.comment.indexOf('url("data') == -1) {
+                                        declaration.comment = changeUrl(declaration.comment, baseURL, targetUrl);
+                                    }
+                                    else if (declaration.value && declaration.value.indexOf('url') > -1 && declaration.value.indexOf('url("data') == -1) {
+                                        declaration.value = changeUrl(declaration.value, baseURL, targetUrl);
+                                    }
+                                }
+                            }
+                        }
+
+                        var cssString = css.stringify(cssObj);
+
+                        res.writeHead(200, {
+                            'Content-Type': 'text/css'
+                        });
+                        res.write(cssString);
+                        //response.addTrailers({ 'Content-MD5': '7895bf4b8828b55ceaf47747b4bca667' });
+                        res.end();
+                    }
+                    catch (err) {
+                        res.writeHead(response.statusCode, {
+                            'Content-Length': response.body.length, // response.headers["content-length"],
+                            'Content-Type': response.headers["content-type"]
+                        });
+                        res.end(response.body);
+                    }
+                }
                 else {
                     //res.setHeader("content-length", response.headers["content-length"]);
                     res.writeHead(response.statusCode, {
@@ -129,7 +195,8 @@ router.get('/', function (req, res, next) {
                 }
             }
             else {
-                res.render('index', { title: sTitle });
+                //res.render('index', { title: sTitle });
+                res.status(404).send("Not found");
             }
         });
     }
@@ -151,11 +218,19 @@ function linkReplacer($, rootElement, domain) {
                 redirectedUrl = (redirectedUrl.startsWith("/") || redirectedUrl.startsWith("http")) ? redirectedUrl : "/" + redirectedUrl;
 
                 //"http://" + req.session.hostURL + 
+<<<<<<< HEAD
                 var url = baseURI + "/?url=" + redirectedUrl;
                 //"http://localhost:3000/?url=" + redirectedUrl;
                 if (redirectedUrl.indexOf("http:") == -1) {
                     //url = "http://localhost:3000/?url=" + "http://" + domain + redirectedUrl;
                     url = baseURI + "/?url=" + "http://" + domain + redirectedUrl;
+=======
+                var url = "http://" + baseURL + "/?url=" + redirectedUrl;
+                //"http://localhost:3000/?url=" + redirectedUrl;
+                if (redirectedUrl.indexOf("http") == -1) {
+                    //url = "http://localhost:3000/?url=" + "http://" + domain + redirectedUrl;
+                    url = "http://" + baseURL + "/?url=" + "http://" + domain + redirectedUrl;
+>>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
                 }
 
                 if ($(this).attr("href")) {
@@ -164,12 +239,95 @@ function linkReplacer($, rootElement, domain) {
                 else if ($(this).attr("src")) {
                     $(this).attr("src", url);
                 }
+                else if ($(this).attr("style") && $(this).attr("style").indexOf('url(')>-1) {
+                    var cssObj = css.parse($(this).attr("style"), { source: 'sample.css' });
+                    if (cssObj) {
+
+                    }
+                }
             }
             if ($(this).children().length > 0) {
                 linkReplacer($, $(this), domain);
             }
         });
     }
+}
+
+String.prototype.replaceAll = function (strValue, changedValue) {
+    var strReturnValue = this;
+    while (strReturnValue.indexOf(strValue) > -1) {
+        strReturnValue = strReturnValue.replace(strValue, changedValue);
+    }
+
+    return strReturnValue;
+}
+
+function changeUrl(value, baseURI, targetDoamin) {
+    var url = "http://" + baseURI + "/?url=" + targetDoamin;
+    var suburl = '';
+    var i = 0;
+    var urls = [];
+
+    var URL = urlLib.parse(targetDoamin);
+    var domain = URL.hostname;
+
+    var word = '';
+    var sentance = '';
+    var endIndex = -1, startIndex = -1;
+    var index = 0;
+    while (i < value.length) {
+        if (word == '' && value[i] == 'u' && (i == 0 || value[i - 1] == ' ' || value[i - 1] == ',')) {
+            //not started with url or some word starts with u
+            word += value[i];
+            sentance += value[i];
+        }
+        else if (startIndex > -1 && endIndex <= 0) {
+            if (value[i] == ")") {
+                sentance += value[i];
+                endIndex = i - 1;
+                word = '';
+                startIndex = -1;
+                endIndex = -1;
+                urls.push(suburl.replaceAll("'", "").replaceAll('"',""));
+                suburl = '';
+            }
+            else {
+                suburl += value[i];
+            }
+        }
+        else if (startIndex == -1 && word != '' && (value[i] != ' ' || i == (value.length - 1))) {
+            sentance += value[i];
+            word += value[i];
+            if (word.startsWith('url(')) {
+                startIndex = i;
+                sentance += "{" + index++ + "}";
+            }
+        }
+        else {
+            sentance += value[i];
+        }
+
+        i++;
+    }
+
+    for (var idx = 0; idx < urls.length; idx++) {
+        suburl = urls[idx];
+        suburl = suburl.replaceAll('"', "").replaceAll("'", "");
+
+        if (suburl.startsWith("/")) {
+            url = "http://" + baseURI + "/?url=" + URL.protocol + "//" + domain;
+        }
+
+        if (url.endsWith('/'))
+            url = url.substring(0, (url.length - 2)) + suburl;
+        else
+            url += suburl;
+
+        url = url.replaceAll('"', "");
+        sentance = sentance.replace("{" + idx + "}", url);
+    }
+
+    return sentance;
 }
 
 module.exports = router;

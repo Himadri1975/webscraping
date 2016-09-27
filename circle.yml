@@ -6,10 +6,16 @@
 #    branch: master
 #    commands:
 #      - $DOCKER_HUB_TRIGGER
+<<<<<<< HEAD
 
 machine:
    services:
      - docker
+=======
+machine:
+  environment:
+    NODE_ENV: deployment
+>>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
 test:
    override:    
      - mocha
