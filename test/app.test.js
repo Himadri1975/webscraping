@@ -8,18 +8,10 @@ var util = require('util');
 var timeoutValue = 30000;
 var config = require('../config');
 
-<<<<<<< HEAD
-var port = 8989;
-//var HOSTNAME = os.hostname() || "localhost";
-var HOSTNAME = "192.168.99.100";
-//var baseURL = "http://localhost:3000/";
-var baseURL = "http://" + HOSTNAME + ":" + port + "/ ";
-=======
 var port = config().port || 3000;
 var HOSTNAME = config().host || "localhost";
 //var baseURL = "http://localhost:3000/";
 var baseURL = HOSTNAME + ":" + port;
->>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
 
 describe('Testing webscrapping web software', function () {
     this.timeout(timeoutValue);

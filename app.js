@@ -45,13 +45,7 @@ app.use(function (req, res, next) {
 
     if (url && url.indexOf(hostUrl) == -1) {
         //var redirectedLocation = "http://localhost:3000/?url=" + "http://" + hostUrl + url;
-<<<<<<< HEAD
-		var redirectedLocation = baseUri + "/?url=" + "http://" + hostUrl + url;
-		
-=======
         var redirectedLocation = "http://" + baseURL + "/?url=" + "http://" + hostUrl + url;
-
->>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
         res.redirect(302, redirectedLocation);
         //res.statusCode = 302;
         //res.setHeader("Location", redirectedLocation);

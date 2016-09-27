@@ -8,11 +8,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var path = require('path');
 var os = require('os');
-<<<<<<< HEAD
-=======
 var css = require('css');
-
->>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
 var router = express.Router();
 var sTitle = 'Express';
 var domain = '';
@@ -20,17 +16,10 @@ var requestingDomain = '';
 var config = require('../config');
 
 //var cert = require('ssl-root-cas/latest');
-<<<<<<< HEAD
-//const HOSTNAME = os.hostname() || "localhost";
-const HOSTNAME = "192.168.99.100";
-const PORT = 8989;
-var baseURI = "http://" + HOSTNAME + ":" + PORT;
-=======
 var port = config().port || 3000;
 var HOSTNAME = config().host || "localhost";
 //var baseURL = "http://localhost:3000/";
 var baseURL = HOSTNAME + ":" + port;
->>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
 
 /* GET home page. */
 var url = '';
@@ -218,19 +207,11 @@ function linkReplacer($, rootElement, domain) {
                 redirectedUrl = (redirectedUrl.startsWith("/") || redirectedUrl.startsWith("http")) ? redirectedUrl : "/" + redirectedUrl;
 
                 //"http://" + req.session.hostURL + 
-<<<<<<< HEAD
-                var url = baseURI + "/?url=" + redirectedUrl;
-                //"http://localhost:3000/?url=" + redirectedUrl;
-                if (redirectedUrl.indexOf("http:") == -1) {
-                    //url = "http://localhost:3000/?url=" + "http://" + domain + redirectedUrl;
-                    url = baseURI + "/?url=" + "http://" + domain + redirectedUrl;
-=======
                 var url = "http://" + baseURL + "/?url=" + redirectedUrl;
                 //"http://localhost:3000/?url=" + redirectedUrl;
                 if (redirectedUrl.indexOf("http") == -1) {
                     //url = "http://localhost:3000/?url=" + "http://" + domain + redirectedUrl;
                     url = "http://" + baseURL + "/?url=" + "http://" + domain + redirectedUrl;
->>>>>>> e78729d9c5bfa88c0723e81ee3befa4861c7ae13
                 }
 
                 if ($(this).attr("href")) {
