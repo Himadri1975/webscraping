@@ -7,11 +7,16 @@ var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 var path = require('path');
+var os = require('os');
 var router = express.Router();
 var sTitle = 'Express';
 var domain = '';
 
 //var cert = require('ssl-root-cas/latest');
+//const HOSTNAME = os.hostname() || "localhost";
+const HOSTNAME = "192.168.99.100";
+const PORT = 8989;
+var baseURI = "http://" + HOSTNAME + ":" + PORT;
 
 /* GET home page. */
 var url = '';
@@ -146,9 +151,12 @@ function linkReplacer($, rootElement, domain) {
                 redirectedUrl = (redirectedUrl.startsWith("/") || redirectedUrl.startsWith("http")) ? redirectedUrl : "/" + redirectedUrl;
 
                 //"http://" + req.session.hostURL + 
-                var url = "http://localhost:3000/?url=" + redirectedUrl;
-                if (redirectedUrl.indexOf("http:") == -1)
-                    url = "http://localhost:3000/?url=" + "http://" + domain + redirectedUrl;
+                var url = baseURI + "/?url=" + redirectedUrl;
+                //"http://localhost:3000/?url=" + redirectedUrl;
+                if (redirectedUrl.indexOf("http:") == -1) {
+                    //url = "http://localhost:3000/?url=" + "http://" + domain + redirectedUrl;
+                    url = baseURI + "/?url=" + "http://" + domain + redirectedUrl;
+                }
 
                 if ($(this).attr("href")) {
                     $(this).attr("href", url);

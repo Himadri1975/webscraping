@@ -3,11 +3,15 @@ var app = require('../app');
 var request = require('superagent');
 var expect = require('expect.js');
 var cheerio = require('cheerio');
+var os = require('os');
 var util = require('util');
 var timeoutValue = 30000;
 
-var port = 3000;
-var baseURL = "http://localhost:3000/";
+var port = 8989;
+//var HOSTNAME = os.hostname() || "localhost";
+var HOSTNAME = "192.168.99.100";
+//var baseURL = "http://localhost:3000/";
+var baseURL = "http://" + HOSTNAME + ":" + port + "/ ";
 
 describe('Testing webscrapping web software', function () {
     this.timeout(timeoutValue);
