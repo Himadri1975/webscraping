@@ -175,7 +175,7 @@ router.get('/', function (req, res, next) {
                 else {
                     //res.setHeader("content-length", response.headers["content-length"]);
                     res.writeHead(response.statusCode, {
-                        'Content-Length': response.body.length, // response.headers["content-length"],
+                        //'Content-Length': response.body.length, // response.headers["content-length"],
                         'Content-Type': response.headers["content-type"]
                     });
 
