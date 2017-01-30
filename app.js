@@ -32,6 +32,10 @@ app.use(cookieSession({ name: 'session', keys: ['key1', 'key2'] }));
 app.use('/', routes);
 app.use('/users', users);
 
+//const HOSTNAME = "192.168.99.100";
+//const PORT = 8989;
+//var baseUri = "http://" + HOSTNAME + ":" + PORT;
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     //debugger;
@@ -42,7 +46,6 @@ app.use(function (req, res, next) {
     if (url && url.indexOf(hostUrl) == -1) {
         //var redirectedLocation = "http://localhost:3000/?url=" + "http://" + hostUrl + url;
         var redirectedLocation = "http://" + baseURL + "/?url=" + "http://" + hostUrl + url;
-
         res.redirect(302, redirectedLocation);
         //res.statusCode = 302;
         //res.setHeader("Location", redirectedLocation);

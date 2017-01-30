@@ -9,7 +9,6 @@ var cheerio = require('cheerio');
 var path = require('path');
 var os = require('os');
 var css = require('css');
-
 var router = express.Router();
 var sTitle = 'Express';
 var domain = '';

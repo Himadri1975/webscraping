@@ -7,8 +7,11 @@
 #    commands:
 #      - $DOCKER_HUB_TRIGGER
 machine:
+  services:
+    - docker
   environment:
     NODE_ENV: deployment
 test:
   override:    
     - mocha
+     
